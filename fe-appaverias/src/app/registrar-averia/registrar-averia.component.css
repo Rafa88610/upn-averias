@@ -1,0 +1,38 @@
+mat-form-field {
+  display: block;
+  /* width: 100%; */
+}
+
+mat-card {
+  max-width: 80%;
+  margin: 2em auto;
+  text-align: center;
+  /* margin-top: 100px; */
+}
+
+.centerbutton{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custon-buton{
+  width: 80%;
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+}
+
+
+.example-full-width {
+  width: 90%;
+  /* margin: 0 auto; */
+
+}
+
+/* mat-grid-tile {
+  text-align: center;
+  justify-content: center;
+} */
+

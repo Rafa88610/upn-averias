@@ -1,0 +1,7 @@
+.content-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 60px 1rem;
+  background: hwb(49 80% 3%);
+}
