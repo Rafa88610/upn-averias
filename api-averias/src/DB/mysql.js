@@ -83,7 +83,7 @@ function buscarCliente(numDoc){
 
 function averiasPorAsesor(idAsesor){
     return new Promise((resolve,reject)=>{        
-        conexion.query(`SELECT * FROM averia where idAsesor=${idAsesor}`, (error,result)=>{
+        conexion.query(`SELECT * FROM averia a inner join cliente b on a.idCliente=b.idCliente where idAsesor=${idAsesor}`, (error,result)=>{
             return error ? reject(error): resolve(result);
         })
     });
