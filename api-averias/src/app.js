@@ -6,6 +6,8 @@ const productos = require('./modulos/productos/rutas');
 const auth = require('./modulos/auth/rutas');
 
 const error = require('./red/errors');
+const clientes = require('./modulos/clientes/rutas');
+const averias = require('./modulos/averias/rutas');
 
 const app = express();
 
@@ -20,6 +22,11 @@ app.set('port', config.app.port)
 
 app.use('/api/productos',productos);
 app.use('/api/auth',auth);
+app.use('/api/clientes',clientes);
+app.use('/api/averias',averias);
+
+
+
 app.use(error);
 
 module.exports = app;

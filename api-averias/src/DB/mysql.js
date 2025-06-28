@@ -50,11 +50,46 @@ function todos(tabla){
         conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
             return error ? reject(error): resolve(result);
         })
-    });
-   
+    });   
 }
 
-module.exports = {
-   
-    login,todos,
+function insertar(tabla,data){
+    console.log(tabla);
+    console.log(data);
+    return new Promise((resolve,reject)=>{
+        conexion.query(`INSERT INTO ${tabla} set ?`,data, (error,result)=>{
+            return error ? reject(error): resolve(result);
+        })
+    });
+}
+
+function actualizar(tabla,data){
+    return new Promise((resolve,reject)=>{
+        conexion.query(`update ${tabla} where id= ?`,data.id, (error,result)=>{
+            return error ? reject(error): resolve(result);
+        })
+    });
+}
+
+
+function buscarCliente(numDoc){
+    return new Promise((resolve,reject)=>{        
+        conexion.query(`SELECT * FROM cliente where numDoc='${numDoc}'`, (error,result)=>{
+            return error ? reject(error): resolve(result);
+        })
+    });
+}
+
+
+function averiasPorAsesor(idAsesor){
+    return new Promise((resolve,reject)=>{        
+        conexion.query(`SELECT * FROM averia where idAsesor=${idAsesor}`, (error,result)=>{
+            return error ? reject(error): resolve(result);
+        })
+    });
+}
+
+
+module.exports = {   
+    login,todos,insertar,actualizar,averiasPorAsesor,buscarCliente
 }

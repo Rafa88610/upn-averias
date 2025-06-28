@@ -9,11 +9,16 @@ module.exports = function(dbInyectada) {
     }
 
 
-    function todos (){
-        return db.todos(TABLA);
+    function buscar(numDoc){
+        return db.buscarCliente(numDoc);
     }
 
+    function insertar(cliente){
+        return db.insertar(TABLA,cliente);
+    }
+    
+
     return {
-        todos
+        buscar,insertar
     }
 }

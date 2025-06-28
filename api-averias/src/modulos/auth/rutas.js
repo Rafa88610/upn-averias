@@ -1,3 +1,4 @@
+
 const express = require('express');
 
 const respuesta = require('../../red/respuestas');
@@ -17,7 +18,7 @@ async function login (req, res, next){
          const usuario = rpta[0] == null ? null : rpta[0];
           console.log("user>>",usuario)
          if(usuario){
-             respuesta.success(req,res,'Login exitoso',200);   
+             respuesta.success(req,res,usuario,200);   
          }else{
             respuesta.success(req,res,'Credenciales inválidas',200);   
          }
