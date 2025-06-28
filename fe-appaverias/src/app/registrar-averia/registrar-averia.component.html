@@ -21,13 +21,15 @@
           @if(tipoDocumento === 'DNI') {
           <mat-form-field class="example-full-width">
             <mat-label>Documento</mat-label>
-            <input matInput placeholder="DNI" [formControl]="docDNIFormControl" [errorStateMatcher]="matcher" minlength="8" maxlength="8"
+            <input matInput placeholder="DNI" [formControl]="docDNIFormControl" [errorStateMatcher]="matcher"
+              minlength="8" maxlength="8" (keydown.enter)="buscarCliente();"
               oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
           </mat-form-field>
           } @else if(tipoDocumento === 'Pasaporte') {
           <mat-form-field class="example-full-width">
             <mat-label>Documento</mat-label>
-            <input matInput placeholder="Pasaporte" [formControl]="docPasaporteFormControl" [errorStateMatcher]="matcher" minlength="20" maxlength="20"
+            <input matInput placeholder="Pasaporte" [formControl]="docPasaporteFormControl"
+              [errorStateMatcher]="matcher" minlength="20" maxlength="20"
               oninput="this.value = this.value.replace(/[^0-9a-zA-Z]/g, '');" />
           </mat-form-field>
           }
@@ -36,24 +38,27 @@
         <mat-grid-tile colspan="6" rowspan="1">
           <mat-form-field style="width: 95%;">
             <mat-label>Nombres</mat-label>
-            <input matInput value="" type="text" [formControl]="nombreFormControl" [errorStateMatcher]="matcher"
-              minlength="3" maxlength="30" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ ]/g, '');" />
+            <input matInput value="" placeholder="" type="text" [formControl]="nombreFormControl"
+              [errorStateMatcher]="matcher" minlength="3" maxlength="30"
+              oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ ]/g, '');" />
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile colspan="3" rowspan="1">
           <mat-form-field class="example-full-width">
             <mat-label>Apellido Paterno</mat-label>
-            <input matInput value="" type="text" [formControl]="apePatFormControl" [errorStateMatcher]="matcher"
-              minlength="3" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ ]/g, '');">
+            <input matInput value="" placeholder="" type="text" [formControl]="apePatFormControl"
+              [errorStateMatcher]="matcher" minlength="3" maxlength="20"
+              oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ ]/g, '');">
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile colspan="3" rowspan="1">
           <mat-form-field class="example-full-width">
             <mat-label>Apellido Materno</mat-label>
-            <input matInput value="" type="text" [formControl]="apeMatFormControl" [errorStateMatcher]="matcher"
-              minlength="3" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ ]/g, '');" />
+            <input matInput value="" placeholder="" type="text" [formControl]="apeMatFormControl"
+              [errorStateMatcher]="matcher" minlength="3" maxlength="20"
+              oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ ]/g, '');" />
           </mat-form-field>
         </mat-grid-tile>
 
@@ -105,7 +110,8 @@
         <mat-grid-tile colspan="3" rowspan="1">
           <mat-form-field class="example-full-width">
             <mat-label>Motivo</mat-label>
-            <input matInput value="" type="text" [formControl]="motivoFormControl" [errorStateMatcher]="matcher" minlength="5" maxlength="60"/>
+            <input matInput value="" type="text" [formControl]="motivoFormControl" [errorStateMatcher]="matcher"
+              minlength="5" maxlength="60" />
           </mat-form-field>
         </mat-grid-tile>
 
@@ -114,7 +120,7 @@
             <mat-label>Producto</mat-label>
             <mat-select>
               @for (item of productos; track item) {
-              <mat-option [value]="item.id">{{item.nombre}}</mat-option>
+              <mat-option [value]="item.idProducto">{{item.nombre}}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -123,22 +129,24 @@
         <mat-grid-tile colspan="3" rowspan="1">
           <mat-form-field class="example-full-width">
             <mat-label>Nombre de Contacto</mat-label>
-            <input matInput [formControl]="nombreContactoFormControl" [errorStateMatcher]="matcher" type="text" minlength="10" maxlength="50" />
+            <input matInput [formControl]="nombreContactoFormControl" [errorStateMatcher]="matcher" type="text"
+              minlength="10" maxlength="50" />
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile colspan="3" rowspan="1">
           <mat-form-field class="example-full-width">
             <mat-label>Teléfono de contacto</mat-label>
-            <input matInput [formControl]="telfContactoFormControl" [errorStateMatcher]="matcher" type="text" minlength="9" maxlength="9"
-              oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+            <input matInput [formControl]="telfContactoFormControl" [errorStateMatcher]="matcher" type="text"
+              minlength="9" maxlength="9" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile colspan="6" rowspan="1">
           <mat-form-field style="width: 95%;">
             <mat-label>Descripción</mat-label>
-            <textarea matInput #descripcion [formControl]="descFormControl" [errorStateMatcher]="matcher" [maxLength]="200" placeholder="Ingrese descripción"></textarea>
+            <textarea matInput #descripcion [formControl]="descFormControl" [errorStateMatcher]="matcher"
+              [maxLength]="200" placeholder="Ingrese descripción"></textarea>
             <mat-hint align="end">{{descripcion.value.length}} / 200</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
@@ -156,7 +164,7 @@
 <mat-card-content>
   <div class="centerbutton">
     <button mat-raised-button color="primary" class="custon-buton">
-      Registrar Avería
+      Guardar
     </button>
   </div>
 </mat-card-content>

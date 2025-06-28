@@ -1,18 +1,18 @@
 <mat-card>
   <mat-card-header>
-    <h2>Login Form</h2>
+    <h2>Iniciar sesión</h2>
   </mat-card-header>
   <mat-card-content>
     <form #loginForm="ngForm" (submit)="login()">
       <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input matInput [(ngModel)]="user.email" type="email" name="email" placeholder="Ingrese su correo" required />
-        <mat-icon matSuffix>email</mat-icon>
+        <mat-label>Usuario</mat-label>
+        <input matInput [(ngModel)]="user.username" type="text" name="username" placeholder="Ingrese su usuario" required />
+        <mat-icon matSuffix>person</mat-icon>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Contraseña</mat-label>
-        <input matInput type="password" [(ngModel)]="user.password" name="password" placeholder="Ingrese contraseña"
+        <input matInput type="password" [(ngModel)]="user.contrasenia" name="password" placeholder="Ingrese contraseña"
           required />
         <mat-icon matSuffix>lock</mat-icon>
       </mat-form-field>

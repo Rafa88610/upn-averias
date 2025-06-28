@@ -18,6 +18,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router } from '@angular/router';
+import { DataService } from '../services/data.service';
+import { IDataResponse } from '../model/IDataResponse';
+import { lastValueFrom } from 'rxjs';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -34,8 +37,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 interface Producto {
-  id: string;
+  idProducto: number;
   nombre: string;
+  descripcion: string;
+  estado: string;
 }
 
 @Component({
@@ -60,11 +65,7 @@ export class RegistrarAveriaComponent {
   // [x: string]: any;
   matcher = new MyErrorStateMatcher();
 
-  productos: Producto[] = [
-    { id: 'steak-0', nombre: 'Steak' },
-    { id: 'pizza-1', nombre: 'Pizza' },
-    { id: 'tacos-2', nombre: 'Tacos' },
-  ];
+  productos: Producto[] = [];
 
   tipoDocumento: string = 'DNI';
 
@@ -140,4 +141,78 @@ export class RegistrarAveriaComponent {
     Validators.maxLength(200),
   ]);
 
+  idCliente: number = 0;
+
+  // Metodos de las clases
+
+  constructor(private dataService: DataService, private router: Router) {
+    this.listarProductos();
+  }
+
+  async listarProductos() {
+    try {
+      let response: IDataResponse = await lastValueFrom(
+        this.dataService.listarProductos()
+      );
+      if (response.error) {
+        console.error('Error al listar productos:', response);
+      } else {
+        this.productos = response.body;
+      }
+    } catch (error) {}
+  }
+
+  pressEnter(event: any) {
+    console.log('Evento de tecla presionada:', event);
+    if (event.key === 'Enter') {
+      this.buscarCliente();
+    }
+  }
+
+  async buscarCliente() {
+    console.log('Tipo de documento:', this.tipoDocumento);
+
+    let numDoc: string = '';
+
+    if (this.tipoDocumento === 'DNI') {
+      numDoc =
+        this.docDNIFormControl.value == null
+          ? ''
+          : this.docDNIFormControl.value;
+    } else if (this.tipoDocumento === 'Pasaporte') {
+      numDoc =
+        this.docPasaporteFormControl.value == null
+          ? ''
+          : this.docPasaporteFormControl.value;
+    }
+
+    try {
+      let response: IDataResponse = await lastValueFrom(
+        this.dataService.buscarCliente(numDoc)
+      );
+      if (response.error) {
+        console.error('Error al buscar cliente:', response);
+      } else {
+        // Aquí puedes manejar la respuesta del cliente encontrado
+        console.log('Cliente encontrado:', response.body);
+        if (response.body) {
+          // Asignar los valores del cliente encontrado a los controles del formulario
+          this.idCliente = response.body.idCliente;
+
+          this.nombreFormControl.setValue(response.body.nombres);
+          this.apePatFormControl.setValue(response.body.apellPaterno);
+          this.apeMatFormControl.setValue(response.body.apellMaterno);
+          this.telefonoFormControl.setValue(response.body.telefono);
+          this.emailFormControl.setValue(response.body.correo);
+          this.direccionFormControl.setValue(response.body.direccion);
+        } else {
+          alert(
+            'No se encontró ningún cliente con el número de documento proporcionado.'
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Error al llamar al servicio buscarCliente:', error);
+    }
+  }
 }

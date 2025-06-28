@@ -2,3 +2,23 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@media (width >=768px) {
+    .modal_detalle {
+        width: 500px;
+        min-width: 500px !important;
+    }
+
+    /* .modal_actualizacion {
+        width: 400px;
+        min-width: 400px !important;
+    }
+
+    .modal_border:first-of-type {
+        border-right: 0.5px solid #00903B;
+    }
+
+    .modal_border:nth-of-type(2) {
+        border-left: 0.5px solid #00903B;
+    } */
+}

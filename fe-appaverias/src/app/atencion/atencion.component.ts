@@ -1,53 +1,111 @@
 import { Component } from '@angular/core';
-import {AfterViewInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { AfterViewInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { DataService } from '../services/data.service';
+import { IDataResponse } from '../model/IDataResponse';
+import { lastValueFrom } from 'rxjs';
+import { Averia } from '../model/Averia';
 
 @Component({
   selector: 'app-atencion',
-  imports: [MatPaginator, MatPaginatorModule, MatTableModule],
+  imports: [MatPaginator, MatPaginatorModule, MatTableModule, MatButtonModule, MatIconModule],
   templateUrl: './atencion.component.html',
-  styleUrl: './atencion.component.css'
+  styleUrl: './atencion.component.css',
 })
-
 export class AtencionComponent implements AfterViewInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = [
+    'id',
+    'cliente',
+    'motivo',
+    'producto',
+    'datosContacto',
+    'descripcion',
+    'esDerivado',
+  ];
 
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
+
+  listAverias: any[] = [];
+
+  dataSource = new MatTableDataSource<any>(this.listAverias);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+  constructor(private dataService: DataService, private router: Router) {
+  this.listarAverias ();
+  }
+
+  async listarAverias() {
+
+    try {
+      const userString = localStorage.getItem('user');
+      const userId = userString !== null ? Number(userString) : 0;
+
+      let response: IDataResponse = await lastValueFrom(this.dataService.listarAverias(userId));
+      if (response.error) {
+        console.error('Error al listar averías:', response);
+      } else {
+        this.dataSource.data = response.body;
+      }
+    } catch (error) {
+      console.error('Error al llamar al servicio listarAverias:', error);
+    }
+  }
+
 }
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+// export interface PeriodicElement {
+//   position: number;
+//   documento: string;
+//   nombres: string;
+//   apellidos: string;
+//   telefono: string;
+//   correo: string;
+//   direccion: string;
+//   motivo: string;
+//   producto: string;
+//   nomContacto: string;
+//   telfContacto: string;
+//   descripcion: string;
+//   estado: string;
+// }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];
+// const ELEMENT_DATA: PeriodicElement[] = [
+//   {
+//     position: 1,
+//     documento: '45101646',
+//     nombres: 'Juan',
+//     apellidos: 'Perez',
+//     telefono: '987654321',
+//     correo: 'juan@unzip.pe',
+//     direccion: 'Av. Siempre Viva 123',
+//     motivo: 'Consulta',
+//     producto: 'Producto A',
+//     nomContacto: 'Maria',
+//     telfContacto: '987654321',
+//     descripcion: 'Consulta sobre el producto A',
+//     estado: 'Pendiente',
+//   },
+//   {
+//     position: 2,
+//     documento: '45101647',
+//     nombres: 'Ana',
+//     apellidos: 'Lopez',
+//     telefono: '987654322',
+//     correo: 'anasophia@upn.pe',
+//     direccion: 'Av. Siempre Viva 456',
+//     motivo: 'Reclamo',
+//     producto: 'Producto B',
+//     nomContacto: 'Carlos',
+//     telfContacto: '987654323',
+//     descripcion: 'Reclamo sobre el producto B',
+//     estado: 'En Proceso',
+//   },
+// ];
