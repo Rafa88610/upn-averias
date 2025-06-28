@@ -1,0 +1,186 @@
+Login
+POST: http://localhost:4000/api/auth
+Entrada:
+{
+    "username":"admin",
+    "contrasenia":"12356"
+}
+
+Salida 1:
+{
+    "error": false,
+    "status": 200,
+    "body": "Credenciales inválidas"
+}
+Salida 2:
+{
+    "error": false,
+    "status": 200,
+    "body": {
+        "id": 1,
+        "username": "admin",
+        "contrasenia": "123456",
+        "rol": "admin",
+        "estado": "A"
+    }
+}
+
+Listar productos
+GET: http://localhost:4000/api/productos
+
+Salida:
+
+"error": false,
+    "status": 200,
+    "body": [
+        {
+            "idProducto": 1,
+            "nombre": "Telefonia Fija",
+            "descripcion": "Telefonia Fija",
+            "estado": "A"
+        },
+        {
+            "idProducto": 2,
+            "nombre": "Telefonia Movil",
+            "descripcion": "Telefonia Movil",
+            "estado": "A"
+        },
+        {
+            "idProducto": 3,
+            "nombre": "Internet",
+            "descripcion": "Internet",
+            "estado": "A"
+        },
+        {
+            "idProducto": 4,
+            "nombre": "Movistar Tv",
+            "descripcion": "Movistar Tv",
+            "estado": "A"
+        },
+        {
+            "idProducto": 5,
+            "nombre": "Trio Movistar",
+            "descripcion": "Trio Movistar",
+            "estado": "A"
+        },
+        {
+            "idProducto": 6,
+            "nombre": "Movistar Duo",
+            "descripcion": "Movistar Duo",
+            "estado": "A"
+        }
+    ]
+}
+
+Registrar cliente:
+POST: http://localhost:4000/api/clientes
+
+Entrada:
+
+{
+    "tipoDoc": "DNI",
+    "numDoc":"34556123",
+    "nombres": "Ana",
+    "apellPaterno":"Saavedra",
+    "apellMaterno":"Talledo",
+    "telefono": "987654321",
+    "direccion":"Av. Las Flores 123, San Miguel, Lima",
+    "correo":"anasofia@correo.pe"
+}
+
+Salida 1:
+{
+    "error": true,
+    "status": 500,
+    "body": "Field 'correo' doesn't have a default value"
+}
+
+Salida 2:
+{
+    "error": false,
+    "status": 200,
+    "body": 7
+}
+
+Buscar cliente:
+GET: http://localhost:4000/api/clientes/45690555
+
+Salida:
+{
+    "error": false,
+    "status": 200,
+    "body": {
+        "idCliente": 1,
+        "tipoDoc": "DNI",
+        "numDoc": "12345678",
+        "nombres": "Ana",
+        "apellPaterno": "Saavedra",
+        "apellMaterno": "Talledo",
+        "telefono": "987654321",
+        "direccion": "Av. Las Flores 123, San Miguel, Lima",
+        "correo": "anasofia@correo.pe"
+    }
+}
+
+Salida 2:
+{
+    "error": false,
+    "status": 200,
+    "body": null
+}
+
+Registrar averia:
+POST: http://localhost:4000/api/averias
+
+Entrada:
+{
+    "motivo" :"motivo",
+    "descripcion":"descripcion" ,
+    "idAsesor" :2 ,
+	"idCliente" :3 ,
+	"idProducto" :2 ,
+    "nombContacto" :"nombre contacto" ,
+    "telefContacto" :"12345667" ,
+    "esDerivado" :0 
+}
+
+Salida:
+{
+    "error": false,
+    "status": 200,
+    "body": 6
+}
+
+Listar averias por id asesor
+
+GET: http://localhost:4000/api/averias/2
+
+Salida:
+{
+    "error": false,
+    "status": 200,
+    "body": [
+        {
+            "idAveria": 5,
+            "motivo": "motivo",
+            "descripcion": "descripcion",
+            "idAsesor": 2,
+            "idCliente": 3,
+            "idProducto": 2,
+            "nombContacto": "nombre contacto",
+            "telefContacto": "12345667",
+            "esDerivado": 0
+        },
+        {
+            "idAveria": 6,
+            "motivo": "motivo",
+            "descripcion": "descripcion",
+            "idAsesor": 2,
+            "idCliente": 3,
+            "idProducto": 2,
+            "nombContacto": "nombre contacto",
+            "telefContacto": "12345667",
+            "esDerivado": 0
+        }
+    ]
+}
