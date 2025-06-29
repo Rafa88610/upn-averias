@@ -68,6 +68,8 @@ export class UsuariosComponent implements AfterViewInit {
   ];
 
   rol: string = ''; // Variable para almacenar el rol seleccionado
+  estado:string= '';
+
   listUsuarios:any[]=[];
 
   usuario = {
@@ -122,6 +124,7 @@ export class UsuariosComponent implements AfterViewInit {
   async registrarUsuario(){
     
     this.usuario.rol= this.rol;
+    this.usuario.estado= this.estado;
     console.log(this.usuario);
     try {
       let response: IDataResponse = await lastValueFrom(
