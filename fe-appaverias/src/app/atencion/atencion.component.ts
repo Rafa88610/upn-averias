@@ -12,7 +12,13 @@ import { Averia } from '../model/Averia';
 
 @Component({
   selector: 'app-atencion',
-  imports: [MatPaginator, MatPaginatorModule, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [
+    MatPaginator,
+    MatPaginatorModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './atencion.component.html',
   styleUrl: './atencion.component.css',
 })
@@ -23,10 +29,9 @@ export class AtencionComponent implements AfterViewInit {
     'motivo',
     'producto',
     'datosContacto',
-    'descripcion',
+    // 'descripcion',
     'esDerivado',
   ];
-
 
   listAverias: any[] = [];
 
@@ -39,16 +44,17 @@ export class AtencionComponent implements AfterViewInit {
   }
 
   constructor(private dataService: DataService, private router: Router) {
-  this.listarAverias ();
+    this.listarAverias();
   }
 
   async listarAverias() {
-
     try {
       const userString = localStorage.getItem('user');
       const userId = userString !== null ? Number(userString) : 0;
 
-      let response: IDataResponse = await lastValueFrom(this.dataService.listarAverias(userId));
+      let response: IDataResponse = await lastValueFrom(
+        this.dataService.listarAverias(userId)
+      );
       if (response.error) {
         console.error('Error al listar averías:', response);
       } else {
@@ -59,6 +65,9 @@ export class AtencionComponent implements AfterViewInit {
     }
   }
 
+  irRegistrarAveria() {
+    this.router.navigate(['/registrar-averia']);
+  }
 }
 
 // export interface PeriodicElement {

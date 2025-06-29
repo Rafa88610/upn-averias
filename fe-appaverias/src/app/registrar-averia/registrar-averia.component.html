@@ -118,7 +118,7 @@
         <mat-grid-tile colspan="3" rowspan="1">
           <mat-form-field class="example-full-width">
             <mat-label>Producto</mat-label>
-            <mat-select>
+            <mat-select [formControl]="productoFormControl" [errorStateMatcher]="matcher">
               @for (item of productos; track item) {
               <mat-option [value]="item.idProducto">{{item.nombre}}</mat-option>
               }
@@ -163,7 +163,7 @@
 
 <mat-card-content>
   <div class="centerbutton">
-    <button mat-raised-button color="primary" class="custon-buton">
+    <button mat-raised-button color="primary" class="custon-buton" (click)="registrarAveria()">
       Guardar
     </button>
   </div>

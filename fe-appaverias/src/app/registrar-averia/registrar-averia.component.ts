@@ -141,11 +141,18 @@ export class RegistrarAveriaComponent {
     Validators.maxLength(200),
   ]);
 
+  productoFormControl = new FormControl('', [Validators.required]);
+
   idCliente: number = 0;
+  idAsesor: number = 0;
 
   // Metodos de las clases
 
   constructor(private dataService: DataService, private router: Router) {
+    //const userString = localStorage.getItem('user');
+    this.idAsesor = 2; // Asignar un ID de asesor fijo para pruebas
+    //userString !== null ? Number(userString) : 0;
+
     this.listarProductos();
   }
 
@@ -205,7 +212,12 @@ export class RegistrarAveriaComponent {
           this.telefonoFormControl.setValue(response.body.telefono);
           this.emailFormControl.setValue(response.body.correo);
           this.direccionFormControl.setValue(response.body.direccion);
+
+          this.disabledInputCliente();
         } else {
+          this.enableInputCliente();
+          this.limpiarCampos();
+          this.idCliente = 0; // Reiniciar el ID del cliente si no se encuentra
           alert(
             'No se encontró ningún cliente con el número de documento proporcionado.'
           );
@@ -214,5 +226,71 @@ export class RegistrarAveriaComponent {
     } catch (error) {
       console.error('Error al llamar al servicio buscarCliente:', error);
     }
+  }
+
+  async registrarAveria() {
+    console.log('Registrando avería...', this.idCliente);
+    if (this.idCliente === 0) {
+      alert('Debe buscar un cliente antes de registrar una avería.');
+      return;
+    }
+
+    const averiaData = {
+      idCliente: this.idCliente,
+      idAsesor: this.idAsesor,
+      motivo: this.motivoFormControl.value,
+      nombContacto: this.nombreContactoFormControl.value,
+      telefContacto: this.telfContactoFormControl.value,
+      descripcion: this.descFormControl.value,
+      idProducto: this.productoFormControl.value,
+    };
+
+    try {
+      let response: IDataResponse = await lastValueFrom(
+        this.dataService.registrarAveria(averiaData)
+      );
+      if (response.error) {
+        console.error('Error al registrar avería:', response);
+        alert('Error al registrar la avería. Inténtelo de nuevo.');
+      } else {
+        console.log('Avería registrada con éxito:', response.body);
+        alert('Avería registrada con éxito.');
+        this.router.navigate(['/atencion']);
+      }
+    } catch (error) {
+      console.error('Error al llamar al servicio registrarAveria:', error);
+      alert('Error al registrar la avería. Inténtelo de nuevo.');
+    }
+  }
+
+  disabledInputCliente() {
+    this.nombreFormControl.disable();
+
+    this.apeMatFormControl.disable();
+    this.apePatFormControl.disable();
+    this.emailFormControl.disable();
+    this.telefonoFormControl.disable();
+    this.direccionFormControl.disable();
+  }
+
+  enableInputCliente() {
+    this.nombreFormControl.enable();
+
+    this.apeMatFormControl.enable();
+    this.apePatFormControl.enable();
+    this.emailFormControl.enable();
+    this.telefonoFormControl.enable();
+    this.direccionFormControl.enable();
+  }
+
+  limpiarCampos() {
+    this.docDNIFormControl.setValue('');
+    this.docPasaporteFormControl.setValue('');
+    this.nombreFormControl.setValue('');
+    this.apePatFormControl.setValue('');
+    this.apeMatFormControl.setValue('');
+    this.telefonoFormControl.setValue('');
+    this.emailFormControl.setValue('');
+    this.direccionFormControl.setValue('');
   }
 }

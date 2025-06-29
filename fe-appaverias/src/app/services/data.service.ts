@@ -15,6 +15,7 @@ export class DataService {
   urlListarAverias = 'http://localhost:4000/api/averias/';
   urlProductos = 'http://localhost:4000/api/productos';
   urlBuscarCliente = 'http://localhost:4000/api/clientes/';
+  urlRegistrarAveria = 'http://localhost:4000/api/averias';
 
   constructor(private http: HttpClient) { }
 
@@ -31,6 +32,10 @@ export class DataService {
 
   buscarCliente(numDoc: string) {
     return this.http.get<IDataResponse>(this.urlBuscarCliente + numDoc, this.options);
+  }
+
+  registrarAveria(averia: any) {
+    return this.http.post<IDataResponse>(this.urlRegistrarAveria, averia, this.options);
   }
 
 

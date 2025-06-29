@@ -3,7 +3,7 @@
 </div>
 
 <div class="content-button">
-  <button mat-raised-button color="primary" class="custon-buton">Registrar Averia</button>
+  <button mat-raised-button color="primary" class="custon-buton" (click)="irRegistrarAveria()">Registrar Averia</button>
 </div>
 
 <div class="mat-elevation-z8">
@@ -18,13 +18,14 @@
     <!-- Weight Column -->
     <ng-container matColumnDef="cliente">
       <th mat-header-cell *matHeaderCellDef> Cliente </th>
-      <td mat-cell *matCellDef="let element"> <strong>Nombre: </strong>{{element.nombres}} {{element.apellPaterno}} {{element.apellMaterno}} <br> <strong>Doc.:</strong> {{element.numDoc}}
+      <td mat-cell *matCellDef="let element"> <strong>Nombre: </strong>{{element.nombres}} {{element.apellPaterno}}
+        {{element.apellMaterno}} <br> <strong>Doc.:</strong> {{element.numDoc}}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="producto">
       <th mat-header-cell *matHeaderCellDef> Producto </th>
-      <td mat-cell *matCellDef="let element"> {{element.idProducto}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
     </ng-container>
 
     <!-- Symbol Column -->
@@ -35,13 +36,15 @@
 
     <ng-container matColumnDef="datosContacto">
       <th mat-header-cell *matHeaderCellDef> Datos de Contacto </th>
-      <td mat-cell *matCellDef="let element"> <strong>Nom.:</strong> {{element.nombContacto}} <br> <strong>Telf.:</strong> {{element.telefContacto}} </td>
+      <td mat-cell *matCellDef="let element"> <strong>Nom.:</strong> {{element.nombContacto}} <br>
+        <strong>Telf.:</strong> {{element.telefContacto}}
+      </td>
     </ng-container>
 
-    <ng-container matColumnDef="descripcion">
+    <!-- <ng-container matColumnDef="descripcion">
       <th mat-header-cell *matHeaderCellDef> Descripción </th>
       <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
-    </ng-container>
+    </ng-container> -->
 
     <ng-container matColumnDef="esDerivado">
       <th mat-header-cell *matHeaderCellDef> Estado </th>
