@@ -10,6 +10,7 @@ const auth = require('./modulos/auth/rutas');
 const error = require('./red/errors');
 const clientes = require('./modulos/clientes/rutas');
 const averias = require('./modulos/averias/rutas');
+const usuarios = require('./modulos/usuarios/rutas');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/productos',productos);
 app.use('/api/auth',auth);
 app.use('/api/clientes',clientes);
 app.use('/api/averias',averias);
+app.use('/api/usuarios',usuarios);
 
 
 

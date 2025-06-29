@@ -53,11 +53,11 @@ function todos(tabla){
     });   
 }
 
-function insertar(tabla,data){
-    console.log(tabla);
-    console.log(data);
+function insertar(tabla,data){   
+    console.log("ingresa >>",data);
     return new Promise((resolve,reject)=>{
         conexion.query(`INSERT INTO ${tabla} set ?`,data, (error,result)=>{
+            console.log(result);
             return error ? reject(error): resolve(result);
         })
     });
@@ -65,7 +65,15 @@ function insertar(tabla,data){
 
 function actualizar(tabla,data){
     return new Promise((resolve,reject)=>{
-        conexion.query(`update ${tabla} where id= ?`,data.id, (error,result)=>{
+        conexion.query(`update ${tabla} set ? where id= ?`,[data,data.id], (error,result)=>{
+            return error ? reject(error): resolve(result);
+        })
+    });
+}
+
+function eliminar(tabla,id){
+    return new Promise((resolve,reject)=>{
+        conexion.query(`delete from ${tabla} where id= ?`,id, (error,result)=>{
             return error ? reject(error): resolve(result);
         })
     });
@@ -91,5 +99,5 @@ function averiasPorAsesor(idAsesor){
 
 
 module.exports = {   
-    login,todos,insertar,actualizar,averiasPorAsesor,buscarCliente
+    login,todos,insertar,actualizar,eliminar,averiasPorAsesor,buscarCliente
 }

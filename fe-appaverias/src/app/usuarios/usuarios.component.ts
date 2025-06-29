@@ -18,6 +18,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { IDataResponse } from '../model/IDataResponse';
+import { lastValueFrom } from 'rxjs';
+import { DataService } from '../services/data.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -58,16 +61,17 @@ export class UsuariosComponent implements AfterViewInit {
   matcher = new MyErrorStateMatcher();
 
   displayedColumns: string[] = [
-    'position',
-    'userName',
-    'contrasenia',
+    'id',
+    'username',    
     'rol',
-    'estado',
+    'estado'  
   ];
 
   rol: string = ''; // Variable para almacenar el rol seleccionado
+  listUsuarios:any[]=[];
 
   usuario = {
+    id:0,
     username: '',
     contrasenia: '',
     rol: '',
@@ -81,12 +85,14 @@ export class UsuariosComponent implements AfterViewInit {
     Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).*$'), // Al menos una minúscula, una mayúscula, un número y un carácter especial
   ]);
 
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<any>(this.listUsuarios);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('modalRegistro') modalRegistro: any;
 
-  constructor(private dialog: MatDialog, private router: Router) {}
+  constructor(private dialog: MatDialog, private router: Router,private dataService: DataService) {
+    this.listarUsuarios();
+  }
 
   openDialog() {
     this.dialog.open(this.modalRegistro, {
@@ -98,29 +104,44 @@ export class UsuariosComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+  async listarUsuarios(){
+    try {
+      let response:IDataResponse=await lastValueFrom(this.dataService.listarUsuarios());
+      if(response.error){
+        console.error("Error al listar usuarios",response);
+      }else{
+        this.dataSource.data=response.body;
+      }
+    } catch (error) {
+      console.error('Error al llamar al servicio listarUsuarios:', error);
+    }
+
+  }
+
+  async registrarUsuario(){
+    
+    this.usuario.rol= this.rol;
+    console.log(this.usuario);
+    try {
+      let response: IDataResponse = await lastValueFrom(
+        this.dataService.registrarUsuario(this.usuario)
+      );
+      if (response.error) {
+        console.error('Error al registrar usuario:', response);
+        alert('Error al registrar la usuario. Inténtelo de nuevo.');
+      } else {
+        console.log('Usuario registrado con éxito:', response.body);
+        alert('Usuario registrado con éxito.');
+        this.dialog.closeAll();
+        this.listarUsuarios();
+      }
+    } catch (error) {
+      console.error('Error al llamar al servicio:', error);
+      alert('Error al registrar usuario. Inténtelo de nuevo.');
+    }
+
+
+  }
 }
 
-export interface PeriodicElement {
-  position: number;
-  userName: string;
-  contrasenia: string;
-  rol: string;
-  estado: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    position: 1,
-    userName: 'Juan',
-    contrasenia: 'Perez',
-    rol: 'asesor',
-    estado: 'habilitado',
-  },
-  {
-    position: 2,
-    userName: 'Rafael',
-    contrasenia: 'Munoz',
-    rol: 'asesor',
-    estado: 'desabilitado',
-  },
-];
