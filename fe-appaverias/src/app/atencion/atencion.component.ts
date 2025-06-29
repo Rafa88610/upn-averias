@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MAT_PAGINATOR_DEFAULT_OPTIONS,
+  MatPaginator,
+  MatPaginatorIntl,
+  MatPaginatorModule,
+} from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,24 +17,18 @@ import { Averia } from '../model/Averia';
 
 @Component({
   selector: 'app-atencion',
-  imports: [
-    MatPaginator,
-    MatPaginatorModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-  ],
+  imports: [MatPaginatorModule, MatTableModule, MatButtonModule, MatIconModule],
   templateUrl: './atencion.component.html',
   styleUrl: './atencion.component.css',
 })
-export class AtencionComponent implements AfterViewInit {
+export class AtencionComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
     'cliente',
     'motivo',
     'producto',
     'datosContacto',
-    // 'descripcion',
+    'descripcion',
     'esDerivado',
   ];
 
@@ -37,20 +36,28 @@ export class AtencionComponent implements AfterViewInit {
 
   dataSource = new MatTableDataSource<any>(this.listAverias);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginatorAtencion', { static: false })
+  paginatorAtencion!: MatPaginator;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  constructor(private dataService: DataService, private router: Router) {}
 
-  constructor(private dataService: DataService, private router: Router) {
+  ngOnInit():void {
     this.listarAverias();
   }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginatorAtencion;
+  }
+
+  
 
   async listarAverias() {
     try {
       const userString = localStorage.getItem('user');
+      console.log(userString);
       const userId = userString !== null ? Number(userString) : 0;
+
+      console.log('AsesorID', userId);
 
       let response: IDataResponse = await lastValueFrom(
         this.dataService.listarAverias(userId)
@@ -58,10 +65,11 @@ export class AtencionComponent implements AfterViewInit {
       if (response.error) {
         console.error('Error al listar averías:', response);
       } else {
-        this.dataSource.data = response.body;
+        this.listAverias = response.body;
+        this.dataSource.data = this.listAverias;
       }
     } catch (error) {
-      console.error('Error al llamar al servicio listarAverias:', error);
+      //console.error('Error al llamar al servicio listarAverias:', error);
     }
   }
 

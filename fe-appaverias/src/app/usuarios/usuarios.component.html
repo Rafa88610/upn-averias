@@ -5,7 +5,7 @@
 <div class="content-button">
   <button
     mat-raised-button
-    (click)="openDialog()"
+    (click)="openDialog(null)"
     color="primary"
     class="custon-buton"
   >
@@ -47,12 +47,28 @@
       </td>
     </ng-container>
 
+      <!-- EDitar Column -->
+    <ng-container matColumnDef="editar">
+      <th mat-header-cell *matHeaderCellDef style="text-align: center;">Editar</th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;">
+        <mat-icon style="color: rgb(77, 103, 235);" (click)="openDialog(element)">edit</mat-icon>
+      </td>
+    </ng-container>
+
+      <!-- Eliminar Column -->
+    <ng-container matColumnDef="eliminar">
+      <th mat-header-cell *matHeaderCellDef style="text-align: center;">Eliminar</th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;">
+       <mat-icon style="color: rgb(235, 77, 103);" (click)="eliminarUsuario(element)">delete</mat-icon>
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
   <mat-paginator
-    [pageSizeOptions]="[5, 10, 20]"
+    [pageSizeOptions]="[5, 10, 20]" [length]="dataSource.data.length" [hidden]="dataSource.data.length===0"
     showFirstLastButtons
     aria-label="Select page of periodic elements"
   >
@@ -61,7 +77,7 @@
 
 <!-- Modal registrar usuario -->
 <ng-template #modalRegistro>
-  <form #usuarioForm="ngForm">
+  <form #usuarioForm="ngForm" (submit)="registrarUsuario()">
     <h2 mat-dialog-title>Registrar Usuario</h2>
 
     <mat-dialog-content>
@@ -103,7 +119,7 @@
         <mat-grid-tile colspan="2" rowspan="1">
           <mat-form-field class="example-full-width">
             <mat-label>Rol</mat-label>
-            <mat-select [(value)]="rol">
+            <mat-select [(value)]="usuario.rol">
               <mat-option value="admin">Administrador</mat-option>
               <mat-option value="asesor">Asesor</mat-option>
             </mat-select>
@@ -113,7 +129,7 @@
         <mat-grid-tile colspan="2" rowspan="1">
           <mat-form-field class="example-full-width">
             <mat-label>Estado</mat-label>
-            <mat-select [(value)]="estado">
+            <mat-select [(value)]="usuario.estado">
               <mat-option value="A">Activo</mat-option>
               <mat-option value="I">Inactivo</mat-option>
             </mat-select>
@@ -122,7 +138,10 @@
       </mat-grid-list>
 
      <mat-dialog-actions>
-       <button mat-button (click)="registrarUsuario()">
+       <button mat-button matDialogClose>
+        Cancelar
+      </button>
+       <button mat-button [disabled]="!usuarioForm.form.valid">
         Guardar
       </button>
      </mat-dialog-actions>

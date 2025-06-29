@@ -133,8 +133,7 @@ export class RegistrarAveriaComponent {
     Validators.maxLength(9),
     Validators.pattern('^[0-9]+$'),
   ]);
-  // productoFormControl = new FormControl('', [Validators.required]);
-
+ 
   descFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(5),
@@ -143,6 +142,8 @@ export class RegistrarAveriaComponent {
 
   productoFormControl = new FormControl('', [Validators.required]);
 
+  esDerivadoFormControl= new FormControl('');
+
   idCliente: number = 0;
   idAsesor: number = 0;
 
@@ -150,7 +151,7 @@ export class RegistrarAveriaComponent {
 
   constructor(private dataService: DataService, private router: Router) {
     //const userString = localStorage.getItem('user');
-    this.idAsesor = 2; // Asignar un ID de asesor fijo para pruebas
+    this.idAsesor = 4; // Asignar un ID de asesor fijo para pruebas
     //userString !== null ? Number(userString) : 0;
 
     this.listarProductos();
@@ -229,38 +230,59 @@ export class RegistrarAveriaComponent {
   }
 
   async registrarAveria() {
-    console.log('Registrando avería...', this.idCliente);
-    if (this.idCliente === 0) {
-      alert('Debe buscar un cliente antes de registrar una avería.');
-      return;
-    }
-
-    const averiaData = {
-      idCliente: this.idCliente,
-      idAsesor: this.idAsesor,
-      motivo: this.motivoFormControl.value,
-      nombContacto: this.nombreContactoFormControl.value,
-      telefContacto: this.telfContactoFormControl.value,
-      descripcion: this.descFormControl.value,
-      idProducto: this.productoFormControl.value,
-    };
-
+   
     try {
-      let response: IDataResponse = await lastValueFrom(
+
+      if (this.idCliente === 0) {
+        const cliente = {
+          tipoDoc: this.tipoDocumento,
+          numDoc:
+            this.tipoDocumento == 'DNI'
+              ? this.docDNIFormControl.value
+              : this.docPasaporteFormControl.value,
+          nombres: this.nombreFormControl.value,
+          apellPaterno: this.apePatFormControl.value,
+          apellMaterno: this.apeMatFormControl.value,
+          telefono: this.telefonoFormControl.value,
+          direccion: this.direccionFormControl.value,
+          correo: this.emailFormControl.value,
+        };
+
+        let response: IDataResponse = await lastValueFrom(
+          this.dataService.registrarCliente(cliente)
+        );
+        if (response.error) {
+          console.error('Error al registrar cliente:', response);
+          alert('Error al registrar cliente. Inténtelo de nuevo.');
+        } else {
+          console.log('Cliente registrado con éxito:', response.body);
+          this.idCliente = response.body;
+        }
+      }
+
+      const averiaData = {
+        idCliente: this.idCliente,
+        idAsesor: this.idAsesor,
+        motivo: this.motivoFormControl.value,
+        nombContacto: this.nombreContactoFormControl.value,
+        telefContacto: this.telfContactoFormControl.value,
+        descripcion: this.descFormControl.value,
+        idProducto: this.productoFormControl.value,
+        esDerivado:this.esDerivadoFormControl.value
+      };
+
+      let response2: IDataResponse = await lastValueFrom(
         this.dataService.registrarAveria(averiaData)
       );
-      if (response.error) {
-        console.error('Error al registrar avería:', response);
+      if (response2.error) {
+        console.error('Error al registrar avería:', response2);
         alert('Error al registrar la avería. Inténtelo de nuevo.');
       } else {
-        console.log('Avería registrada con éxito:', response.body);
+        console.log('Avería registrada con éxito:', response2.body);
         alert('Avería registrada con éxito.');
         this.router.navigate(['/atencion']);
       }
-    } catch (error) {
-      console.error('Error al llamar al servicio registrarAveria:', error);
-      alert('Error al registrar la avería. Inténtelo de nuevo.');
-    }
+    } catch (error) {}
   }
 
   disabledInputCliente() {

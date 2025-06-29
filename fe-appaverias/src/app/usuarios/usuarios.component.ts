@@ -12,7 +12,14 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroupDirective, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroupDirective,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
@@ -21,6 +28,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { IDataResponse } from '../model/IDataResponse';
 import { lastValueFrom } from 'rxjs';
 import { DataService } from '../services/data.service';
+import { response } from 'express';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -57,23 +65,22 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrl: './usuarios.component.css',
 })
 export class UsuariosComponent implements AfterViewInit {
-
   matcher = new MyErrorStateMatcher();
 
   displayedColumns: string[] = [
     'id',
-    'username',    
+    'username',
     'rol',
-    'estado'  
+    'estado',
+    'editar',
+    'eliminar',
   ];
 
-  rol: string = ''; // Variable para almacenar el rol seleccionado
-  estado:string= '';
 
-  listUsuarios:any[]=[];
+  listUsuarios: any[] = [];
 
   usuario = {
-    id:0,
+    id: 0,
     username: '',
     contrasenia: '',
     rol: '',
@@ -84,7 +91,9 @@ export class UsuariosComponent implements AfterViewInit {
     Validators.required,
     Validators.minLength(8),
     Validators.maxLength(20),
-    Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).*$'), // Al menos una minúscula, una mayúscula, un número y un carácter especial
+    Validators.pattern(
+      '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[!@#$%^&*()_+{}[]:;<>,.?~\\/-]).*$'
+    ), // Al menos una minúscula, una mayúscula, un número y un carácter especial
   ]);
 
   dataSource = new MatTableDataSource<any>(this.listUsuarios);
@@ -92,11 +101,35 @@ export class UsuariosComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('modalRegistro') modalRegistro: any;
 
-  constructor(private dialog: MatDialog, private router: Router,private dataService: DataService) {
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private dataService: DataService
+  ) {
     this.listarUsuarios();
   }
 
-  openDialog() {
+  openDialog(item: any) {
+    console.log(item);
+    if (item) {
+      this.usuario = {
+        id: item.id,
+        username: item.username,
+        contrasenia: item.contrasenia,
+        rol: item.rol,
+        estado: item.estado,
+      };
+
+    } else {
+      this.usuario = {
+        id: 0,
+        username: '',
+        contrasenia: '',
+        rol: '',
+        estado: '',
+      };
+    }
+
     this.dialog.open(this.modalRegistro, {
       autoFocus: false,
       panelClass: 'modal_detalle',
@@ -107,24 +140,23 @@ export class UsuariosComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  async listarUsuarios(){
+  async listarUsuarios() {
     try {
-      let response:IDataResponse=await lastValueFrom(this.dataService.listarUsuarios());
-      if(response.error){
-        console.error("Error al listar usuarios",response);
-      }else{
-        this.dataSource.data=response.body;
+      let response: IDataResponse = await lastValueFrom(
+        this.dataService.listarUsuarios()
+      );
+      if (response.error) {
+        console.error('Error al listar usuarios', response);
+      } else {
+        this.dataSource.data = response.body;
       }
     } catch (error) {
       console.error('Error al llamar al servicio listarUsuarios:', error);
     }
-
   }
 
-  async registrarUsuario(){
-    
-    this.usuario.rol= this.rol;
-    this.usuario.estado= this.estado;
+  async registrarUsuario() {
+  
     console.log(this.usuario);
     try {
       let response: IDataResponse = await lastValueFrom(
@@ -134,7 +166,7 @@ export class UsuariosComponent implements AfterViewInit {
         console.error('Error al registrar usuario:', response);
         alert('Error al registrar la usuario. Inténtelo de nuevo.');
       } else {
-        console.log('Usuario registrado con éxito:', response.body);
+        console.log(response.body);
         alert('Usuario registrado con éxito.');
         this.dialog.closeAll();
         this.listarUsuarios();
@@ -143,8 +175,25 @@ export class UsuariosComponent implements AfterViewInit {
       console.error('Error al llamar al servicio:', error);
       alert('Error al registrar usuario. Inténtelo de nuevo.');
     }
+  }
 
+  async eliminarUsuario(item:any){
+
+    try {
+      let response:IDataResponse = await lastValueFrom(this.dataService.eliminarUsuario(item.id));
+      if (response.error) {
+        console.error('Error al eliminar usuario:', response);
+        alert('Error al eliminar usuario. Inténtelo de nuevo.');
+      } else {
+        console.log(response.body);
+        alert('Usuario eliminado con éxito.');
+        this.dialog.closeAll();
+        this.listarUsuarios();
+      }
+    } catch (error) {
+      console.error('Error al llamar al servicio:', error);
+      alert('Error al eliminar usuario. Inténtelo de nuevo.');
+    }
 
   }
 }
-

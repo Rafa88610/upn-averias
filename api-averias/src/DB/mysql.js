@@ -91,7 +91,12 @@ function buscarCliente(numDoc){
 
 function averiasPorAsesor(idAsesor){
     return new Promise((resolve,reject)=>{        
-        conexion.query(`SELECT * FROM averia a inner join cliente b on a.idCliente=b.idCliente inner join producto c on a.idProducto=c.idProducto where idAsesor=${idAsesor}`, (error,result)=>{
+        conexion.query(`SELECT idAveria, motivo, a.descripcion,a.idCliente,a.idProducto,
+                                nombContacto,telefContacto,esDerivado,tipoDoc,numDoc,nombres,
+                                apellPaterno,apellMaterno,telefono,direccion,correo,nombre as producto 
+                        FROM averia a inner join cliente b on a.idCliente=b.idCliente 
+                        inner join producto c on a.idProducto=c.idProducto 
+                        where idAsesor=${idAsesor}`, (error,result)=>{
             return error ? reject(error): resolve(result);
         })
     });
