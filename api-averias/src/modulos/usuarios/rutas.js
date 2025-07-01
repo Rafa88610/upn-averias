@@ -9,6 +9,7 @@ router.post('/',registrar)
 router.post('/:id',eliminar)
 router.get('/',listar)
 
+
 async function registrar(req, res, next){
     console.log(req.body);
     try{
@@ -17,8 +18,7 @@ async function registrar(req, res, next){
             items =  await controlador.insertar(req.body);
         }else{
             items =  await controlador.actualizar(req.body);
-        }
-         
+        }         
          respuesta.success(req,res,items.insertId,200);  
     }catch(err){
         next(err);
@@ -45,6 +45,7 @@ async function listar(req, res, next){
         next(err);
     }      
 }
+
 
 
 

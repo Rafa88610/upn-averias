@@ -51,7 +51,7 @@
     <ng-container matColumnDef="editar">
       <th mat-header-cell *matHeaderCellDef style="text-align: center;">Editar</th>
       <td mat-cell *matCellDef="let element" style="text-align: center;">
-        <mat-icon style="color: rgb(77, 103, 235);" (click)="openDialog(element)">edit</mat-icon>
+        <mat-icon style="color: rgb(77, 103, 235);cursor: pointer;" (click)="openDialog(element)">edit</mat-icon>
       </td>
     </ng-container>
 
@@ -59,7 +59,7 @@
     <ng-container matColumnDef="eliminar">
       <th mat-header-cell *matHeaderCellDef style="text-align: center;">Eliminar</th>
       <td mat-cell *matCellDef="let element" style="text-align: center;">
-       <mat-icon style="color: rgb(235, 77, 103);" (click)="eliminarUsuario(element)">delete</mat-icon>
+       <mat-icon style="color: rgb(235, 77, 103);cursor: pointer;" (click)="eliminarUsuario(element)">delete</mat-icon>
       </td>
     </ng-container>
 

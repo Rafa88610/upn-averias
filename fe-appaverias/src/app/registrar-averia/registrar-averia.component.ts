@@ -223,6 +223,7 @@ export class RegistrarAveriaComponent {
             'No se encontró ningún cliente con el número de documento proporcionado.'
           );
         }
+        console.log(this.idCliente);
       }
     } catch (error) {
       console.error('Error al llamar al servicio buscarCliente:', error);
@@ -230,6 +231,7 @@ export class RegistrarAveriaComponent {
   }
 
   async registrarAveria() {
+    console.log(this.tipoDocumento);
    
     try {
 
@@ -248,6 +250,7 @@ export class RegistrarAveriaComponent {
           correo: this.emailFormControl.value,
         };
 
+       
         let response: IDataResponse = await lastValueFrom(
           this.dataService.registrarCliente(cliente)
         );
@@ -268,7 +271,7 @@ export class RegistrarAveriaComponent {
         telefContacto: this.telfContactoFormControl.value,
         descripcion: this.descFormControl.value,
         idProducto: this.productoFormControl.value,
-        esDerivado:this.esDerivadoFormControl.value
+        esDerivado:this.esDerivadoFormControl.value =='' ? 0:this.esDerivadoFormControl.value
       };
 
       let response2: IDataResponse = await lastValueFrom(
@@ -287,7 +290,6 @@ export class RegistrarAveriaComponent {
 
   disabledInputCliente() {
     this.nombreFormControl.disable();
-
     this.apeMatFormControl.disable();
     this.apePatFormControl.disable();
     this.emailFormControl.disable();
@@ -297,7 +299,6 @@ export class RegistrarAveriaComponent {
 
   enableInputCliente() {
     this.nombreFormControl.enable();
-
     this.apeMatFormControl.enable();
     this.apePatFormControl.enable();
     this.emailFormControl.enable();
@@ -306,7 +307,7 @@ export class RegistrarAveriaComponent {
   }
 
   limpiarCampos() {
-    this.docDNIFormControl.setValue('');
+    //this.docDNIFormControl.setValue('');
     this.docPasaporteFormControl.setValue('');
     this.nombreFormControl.setValue('');
     this.apePatFormControl.setValue('');
@@ -314,5 +315,9 @@ export class RegistrarAveriaComponent {
     this.telefonoFormControl.setValue('');
     this.emailFormControl.setValue('');
     this.direccionFormControl.setValue('');
+  }
+
+  volver(){
+    this.router.navigate(['/atencion']);
   }
 }

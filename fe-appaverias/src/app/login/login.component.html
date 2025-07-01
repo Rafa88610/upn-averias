@@ -6,19 +6,108 @@
     <form #loginForm="ngForm" (submit)="login()">
       <mat-form-field>
         <mat-label>Usuario</mat-label>
-        <input matInput [(ngModel)]="user.username" type="text" name="username" placeholder="Ingrese su usuario" required />
+        <input
+          matInput
+          [(ngModel)]="user.username"
+          type="text"
+          name="username"
+          placeholder="Ingrese su usuario"
+          required
+        />
         <mat-icon matSuffix>person</mat-icon>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Contraseña</mat-label>
-        <input matInput type="password" [(ngModel)]="user.contrasenia" name="password" placeholder="Ingrese contraseña"
-          required />
+        <input
+          matInput
+          type="password"
+          [(ngModel)]="user.contrasenia"
+          name="password"
+          placeholder="Ingrese contraseña"
+          required
+        />
         <mat-icon matSuffix>lock</mat-icon>
       </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="!loginForm.form.valid">
-        Iniciar sesión
-      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!loginForm.form.valid"
+      >
+        Iniciar sesión</button
+      ><br /><br />
+      <a mat-button (click)="openModal()">Recuperar contraseña</a>
     </form>
   </mat-card-content>
 </mat-card>
+
+<!-- Modal recuperar contraseña -->
+<ng-template #modalContrasenia>
+  <form #contraseniaForm="ngForm" (submit)="actualizarContrasenia()">
+    <h2 mat-dialog-title>Actualizar contraseña</h2>
+
+    <mat-dialog-content>
+      <mat-grid-list cols="2" rowHeight="65px">
+        <mat-grid-tile colspan="2" rowspan="1">
+          <mat-form-field class="example-full-width">
+            <mat-label>Usuario</mat-label>
+            <input
+              matInput
+              type="text"
+              name="usuario"
+              [(ngModel)]="usuario"
+              [errorStateMatcher]="matcher"
+              minlength="5"
+              maxlength="20"
+              oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ ]/g, '');"
+              required
+            />
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2" rowspan="1">
+          <mat-form-field class="example-full-width">
+            <mat-label>Contraseña</mat-label>
+            <input
+              matInput
+              type="password"
+              name="contrasenia"
+              [formControl]="contraseniaFormControl"
+              [(ngModel)]="contrasenia"
+              [errorStateMatcher]="matcher"
+              minlength="8"
+              maxlength="20"
+              oninput="if (/\s/.test(this.value)) this.value = this.value.replace(/[^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).*$]/g, '')"
+              required
+            />
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2" rowspan="1">
+          <mat-form-field class="example-full-width">
+            <mat-label>Contraseña</mat-label>
+            <input
+              matInput
+              type="password"
+              name="contrasenia"
+              [formControl]="newContraseniaFormControl"
+              [(ngModel)]="newContrasenia"
+              [errorStateMatcher]="matcher"
+              minlength="8"
+              maxlength="20"
+              oninput="if (/\s/.test(this.value)) this.value = this.value.replace(/[^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).*$]/g, '')"
+              required
+            />
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-dialog-actions>
+        <button mat-button matDialogClose>Cancelar</button>
+        <button mat-button [disabled]="!contraseniaForm.form.valid">
+          Guardar
+        </button>
+      </mat-dialog-actions>
+    </mat-dialog-content>
+  </form>
+</ng-template>

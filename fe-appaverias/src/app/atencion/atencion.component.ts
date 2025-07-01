@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { IDataResponse } from '../model/IDataResponse';
 import { lastValueFrom } from 'rxjs';
-import { Averia } from '../model/Averia';
 
 @Component({
   selector: 'app-atencion',
@@ -54,7 +53,7 @@ export class AtencionComponent implements OnInit {
   async listarAverias() {
     try {
       const userString = localStorage.getItem('user');
-      console.log(userString);
+  
       const userId = userString !== null ? Number(userString) : 0;
 
       console.log('AsesorID', userId);
@@ -78,51 +77,3 @@ export class AtencionComponent implements OnInit {
   }
 }
 
-// export interface PeriodicElement {
-//   position: number;
-//   documento: string;
-//   nombres: string;
-//   apellidos: string;
-//   telefono: string;
-//   correo: string;
-//   direccion: string;
-//   motivo: string;
-//   producto: string;
-//   nomContacto: string;
-//   telfContacto: string;
-//   descripcion: string;
-//   estado: string;
-// }
-
-// const ELEMENT_DATA: PeriodicElement[] = [
-//   {
-//     position: 1,
-//     documento: '45101646',
-//     nombres: 'Juan',
-//     apellidos: 'Perez',
-//     telefono: '987654321',
-//     correo: 'juan@unzip.pe',
-//     direccion: 'Av. Siempre Viva 123',
-//     motivo: 'Consulta',
-//     producto: 'Producto A',
-//     nomContacto: 'Maria',
-//     telfContacto: '987654321',
-//     descripcion: 'Consulta sobre el producto A',
-//     estado: 'Pendiente',
-//   },
-//   {
-//     position: 2,
-//     documento: '45101647',
-//     nombres: 'Ana',
-//     apellidos: 'Lopez',
-//     telefono: '987654322',
-//     correo: 'anasophia@upn.pe',
-//     direccion: 'Av. Siempre Viva 456',
-//     motivo: 'Reclamo',
-//     producto: 'Producto B',
-//     nomContacto: 'Carlos',
-//     telfContacto: '987654323',
-//     descripcion: 'Reclamo sobre el producto B',
-//     estado: 'En Proceso',
-//   },
-// ];

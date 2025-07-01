@@ -7,6 +7,7 @@ const controlador =  require('./index');
 const router = express.Router();
 
 router.post('/', login);
+router.post('/:username',actualizarPass);
 
 async function login (req, res, next){
     console.log(req.body);
@@ -26,6 +27,17 @@ async function login (req, res, next){
     }catch(err){
         next(err);
     }   
+}
+
+async function actualizarPass(req, res, next){
+    console.log(req.body);
+    console.log(req.params);
+    try{
+         const items =  await controlador.actualizarContrasenia(req.params.username,req.body.contrasenia);         
+         respuesta.success(req,res,"Se actualizó correctamente",200);  
+    }catch(err){
+        next(err);
+    }      
 }
 
 

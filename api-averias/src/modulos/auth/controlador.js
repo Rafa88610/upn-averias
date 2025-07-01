@@ -1,17 +1,21 @@
-module.exports = function(dbInyectada) {
+module.exports = function (dbInyectada) {
 
     let db = dbInyectada;
 
-    if(!db){
+    if (!db) {
         db = require('../../DB/mysql');
     }
 
 
-    function login (user,passw){
-        return db.login(user,passw);
+    function login(user, passw) {
+        return db.login(user, passw);
+    }
+
+    function actualizarContrasenia(id, pwd) {
+        return db.actualizarContrasenia(id, pwd);
     }
 
     return {
-        login
+        login,actualizarContrasenia
     }
 }

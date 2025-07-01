@@ -1,7 +1,8 @@
-.content-body {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 60px 1rem;
-  background: hwb(202 68% 0%);
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.example-icon {
+  padding: 0 14px;
 }

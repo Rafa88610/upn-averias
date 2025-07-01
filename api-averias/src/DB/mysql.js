@@ -89,6 +89,7 @@ function buscarCliente(numDoc){
 }
 
 
+
 function averiasPorAsesor(idAsesor){
     return new Promise((resolve,reject)=>{        
         conexion.query(`SELECT idAveria, motivo, a.descripcion,a.idCliente,a.idProducto,
@@ -102,7 +103,15 @@ function averiasPorAsesor(idAsesor){
     });
 }
 
+function actualizarContrasenia(username,newPass){
+     return new Promise((resolve,reject)=>{        
+        conexion.query(`update usuario set contrasenia='${newPass}' where username='${username}'`, (error,result)=>{
+            return error ? reject(error): resolve(result);
+        })
+    });
+}
+
 
 module.exports = {   
-    login,todos,insertar,actualizar,eliminar,averiasPorAsesor,buscarCliente
+    login,todos,insertar,actualizar,eliminar,averiasPorAsesor,buscarCliente,actualizarContrasenia
 }

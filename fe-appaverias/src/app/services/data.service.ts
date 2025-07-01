@@ -10,7 +10,7 @@ export class DataService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  urlLogin = 'http://localhost:4000/api/auth';
+  urlLogin = 'http://localhost:4000/api/auth/';
   urlListarAverias = 'http://localhost:4000/api/averias/';
   urlProductos = 'http://localhost:4000/api/productos';
   urlClientes = 'http://localhost:4000/api/clientes/';
@@ -22,6 +22,14 @@ export class DataService {
   login(user: any) {
     return this.http.post<IDataResponse>(this.urlLogin, user, this.options);
   }
+
+  actualizarContrasenia(username:string,newPass:string){
+   let  newPassword={
+      contrasenia:newPass
+    }
+    return this.http.post<IDataResponse>(this.urlLogin + username, newPassword, this.options);
+  }
+
   listarAverias(idAsesor: number) {
     return this.http.get<IDataResponse>(
       this.urlListarAverias + idAsesor,
