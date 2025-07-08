@@ -27,7 +27,7 @@
       <td mat-cell *matCellDef="let element">{{ element.username }}</td>
     </ng-container>
 
-    <!-- Contraseña Column 
+    <!-- Contraseña Column
     <ng-container matColumnDef="contrasenia">
       <th mat-header-cell *matHeaderCellDef>Contraseña</th>
       <td mat-cell *matCellDef="let element">{{ element.contrasenia }}</td>
@@ -110,7 +110,10 @@
               [(ngModel)]="usuario.contrasenia"
               minlength="8"
               maxlength="20"
-              oninput="if (/\s/.test(this.value)) this.value = this.value.replace(/[^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).*$]/g, '')"
+              oninput="if (/\s/.test(this.value)) this.value = this.value.replace(
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]+$/
+                <!-- /[^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).*$]/g, '' -->
+                )"
               required
             />
           </mat-form-field>
@@ -145,7 +148,7 @@
         Guardar
       </button>
      </mat-dialog-actions>
-     
+
     </mat-dialog-content>
   </form>
 </ng-template>

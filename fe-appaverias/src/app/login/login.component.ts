@@ -48,7 +48,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     MatFormFieldModule,
     MatDialogModule,
     MatGridListModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -59,16 +59,17 @@ export class LoginComponent {
     username: '',
     contrasenia: '',
   };
-  usuario:string='';
-  contrasenia:string='';
-  newContrasenia:string='';
+  usuario: string = '';
+  contrasenia: string = '';
+  newContrasenia: string = '';
 
   contraseniaFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(8),
     Validators.maxLength(20),
     Validators.pattern(
-      '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[!@#$%^&*()_+{}[]:;<>,.?~\\/-]).*$'
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]+$/
+      // '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[!@#$%^&*()_+{}[]:;<>,.?~\\/-]).*$'
     ), // Al menos una minúscula, una mayúscula, un número y un carácter especial
   ]);
 
@@ -77,15 +78,16 @@ export class LoginComponent {
     Validators.minLength(8),
     Validators.maxLength(20),
     Validators.pattern(
-      '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[!@#$%^&*()_+{}[]:;<>,.?~\\/-]).*$'
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]+$/
+      // '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[!@#$%^&*()_+{}[]:;<>,.?~\\/-]).*$'
     ), // Al menos una minúscula, una mayúscula, un número y un carácter especial
   ]);
 
   router = inject(Router);
 
- @ViewChild('modalContrasenia') modalContrasenia: any;
+  @ViewChild('modalContrasenia') modalContrasenia: any;
 
-  constructor(private dataservice: DataService,  private dialog: MatDialog,) {}
+  constructor(private dataservice: DataService, private dialog: MatDialog) {}
 
   /* ---------- Llamada de servicios -------------- */
   async login() {
@@ -114,28 +116,29 @@ export class LoginComponent {
   }
 
   openModal() {
-       this.dialog.open(this.modalContrasenia, {
+    this.dialog.open(this.modalContrasenia, {
       autoFocus: false,
       panelClass: 'modal_detalle',
     });
   }
 
-  async actualizarContrasenia(){
-
-    if(this.contraseniaFormControl.value!=this.newContraseniaFormControl.value){
+  async actualizarContrasenia() {
+    if (
+      this.contraseniaFormControl.value != this.newContraseniaFormControl.value
+    ) {
       return;
     }
 
-    try {      
-
-      let response:IDataResponse=await lastValueFrom(this.dataservice.actualizarContrasenia(this.usuario,this.contrasenia ));
-      if(response.error){
+    try {
+      let response: IDataResponse = await lastValueFrom(
+        this.dataservice.actualizarContrasenia(this.usuario, this.contrasenia)
+      );
+      if (response.error) {
         alert('Error al actualizar contraseña');
-      }else{
+      } else {
         alert('Contraseña actualizada');
         this.dialog.closeAll();
       }
-
     } catch (error) {
       alert('Error al actualizar contraseña. Inténtelo de nuevo.');
     }

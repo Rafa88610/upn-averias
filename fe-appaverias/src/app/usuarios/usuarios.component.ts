@@ -90,7 +90,8 @@ export class UsuariosComponent implements AfterViewInit {
     Validators.minLength(8),
     Validators.maxLength(20),
     Validators.pattern(
-      '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[!@#$%^&*()_+{}[]:;<>,.?~\\/-]).*$'
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]+$/
+      // '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[!@#$%^&*()_+{}[]:;<>,.?~\\/-]).*$'
     ), // Al menos una minúscula, una mayúscula, un número y un carácter especial
   ]);
 
@@ -154,7 +155,7 @@ export class UsuariosComponent implements AfterViewInit {
   }
 
   async registrarUsuario() {
-  
+
     console.log(this.usuario);
     try {
       let response: IDataResponse = await lastValueFrom(
